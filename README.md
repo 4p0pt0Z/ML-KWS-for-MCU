@@ -6,7 +6,8 @@ in the paper:
 The scripts are adapted from [Tensorflow examples](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/speech_commands) 
 and some are repeated here for the sake of making these scripts self-contained.
 
-To train a DNN with 3 fully-connected layers with 128 neurons in each layer, run:
+To train a DNN with 3 fully-connected layers with 128 neurons in each layer (deployed DNN has
+144 neurons per layer), run:
 
 ```
 python train.py --model_architecture dnn --model_size_info 128 128 128 
