@@ -1,0 +1,3 @@
+[submodule "Deployment/CMSIS_5"]
+	path = Deployment/CMSIS_5
+	url = git@github.com:4p0pt0Z/CMSIS_5.git
