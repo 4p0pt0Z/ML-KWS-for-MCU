@@ -38,6 +38,6 @@ KWS_DS_CNN::KWS_DS_CNN(int16_t* audio_data_buffer)
 
 KWS_DS_CNN::~KWS_DS_CNN()
 {
-  delete nn;
+  // delete nn;
 }
 

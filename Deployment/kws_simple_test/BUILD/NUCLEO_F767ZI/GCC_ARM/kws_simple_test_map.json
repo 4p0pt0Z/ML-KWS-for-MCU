@@ -1,0 +1,280 @@
+[
+    {
+        "module": "ActivationFunctions\\arm_relu_q7.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 164
+        }
+    }, 
+    {
+        "module": "CommonTables\\arm_common_tables.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 78936
+        }
+    }, 
+    {
+        "module": "ConvolutionFunctions\\arm_convolve_1x1_HWC_q7_fast_nonsquare.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 432
+        }
+    }, 
+    {
+        "module": "ConvolutionFunctions\\arm_depthwise_separable_conv_HWC_q7_nonsquare.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 1008
+        }
+    }, 
+    {
+        "module": "ConvolutionFunctions\\arm_nn_mat_mult_kernel_q7_q15.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 852
+        }
+    }, 
+    {
+        "module": "ConvolutionFunctions\\arm_nn_mat_mult_kernel_q7_q15_reordered.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 556
+        }
+    }, 
+    {
+        "module": "DS_CNN\\ds_cnn.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 23644
+        }
+    }, 
+    {
+        "module": "FullyConnectedFunctions\\arm_fully_connected_q7.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 556
+        }
+    }, 
+    {
+        "module": "KWS_DS_CNN\\kws_ds_cnn.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 60
+        }
+    }, 
+    {
+        "module": "NNSupportFunctions\\arm_q7_to_q15_no_shift.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 116
+        }
+    }, 
+    {
+        "module": "NNSupportFunctions\\arm_q7_to_q15_reordered_no_shift.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 88
+        }
+    }, 
+    {
+        "module": "SoftmaxFunctions\\arm_softmax_q7.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 136
+        }
+    }, 
+    {
+        "module": "TransformFunctions\\arm_bitreversal2.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 192
+        }
+    }, 
+    {
+        "module": "TransformFunctions\\arm_cfft_f32.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 1772
+        }
+    }, 
+    {
+        "module": "TransformFunctions\\arm_cfft_radix8_f32.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 1452
+        }
+    }, 
+    {
+        "module": "TransformFunctions\\arm_rfft_fast_f32.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 368
+        }
+    }, 
+    {
+        "module": "TransformFunctions\\arm_rfft_fast_init_f32.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 360
+        }
+    }, 
+    {
+        "module": "[fill]", 
+        "size": {
+            ".data": 14, 
+            ".bss": 47, 
+            ".text": 165
+        }
+    }, 
+    {
+        "module": "[lib]\\c.a", 
+        "size": {
+            ".data": 2472, 
+            ".bss": 89, 
+            ".text": 36512
+        }
+    }, 
+    {
+        "module": "[lib]\\gcc.a", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 768
+        }
+    }, 
+    {
+        "module": "[lib]\\m.a", 
+        "size": {
+            ".data": 1, 
+            ".bss": 0, 
+            ".text": 9147
+        }
+    }, 
+    {
+        "module": "[lib]\\misc", 
+        "size": {
+            ".data": 12, 
+            ".bss": 28, 
+            ".text": 208
+        }
+    }, 
+    {
+        "module": "arm_avepool_q7_HWC_nonsquare.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 388
+        }
+    }, 
+    {
+        "module": "arm_convolve_HWC_q7_basic_nonsquare.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 716
+        }
+    }, 
+    {
+        "module": "kws.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 380
+        }
+    }, 
+    {
+        "module": "main.o", 
+        "size": {
+            ".data": 20, 
+            ".bss": 64460, 
+            ".text": 1842
+        }
+    }, 
+    {
+        "module": "mbed-os\\drivers", 
+        "size": {
+            ".data": 4, 
+            ".bss": 100, 
+            ".text": 592
+        }
+    }, 
+    {
+        "module": "mbed-os\\features", 
+        "size": {
+            ".data": 164, 
+            ".bss": 46990, 
+            ".text": 72676
+        }
+    }, 
+    {
+        "module": "mbed-os\\hal", 
+        "size": {
+            ".data": 4, 
+            ".bss": 68, 
+            ".text": 2053
+        }
+    }, 
+    {
+        "module": "mbed-os\\platform", 
+        "size": {
+            ".data": 260, 
+            ".bss": 85, 
+            ".text": 3304
+        }
+    }, 
+    {
+        "module": "mbed-os\\rtos", 
+        "size": {
+            ".data": 168, 
+            ".bss": 6073, 
+            ".text": 16623
+        }
+    }, 
+    {
+        "module": "mbed-os\\targets", 
+        "size": {
+            ".data": 5, 
+            ".bss": 1088, 
+            ".text": 15824
+        }
+    }, 
+    {
+        "module": "mfcc.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 1600
+        }
+    }, 
+    {
+        "module": "nn.o", 
+        "size": {
+            ".data": 0, 
+            ".bss": 0, 
+            ".text": 28
+        }
+    }, 
+    {
+        "summary": {
+            "static_ram": 122152, 
+            "total_flash": 276642
+        }
+    }
+]
