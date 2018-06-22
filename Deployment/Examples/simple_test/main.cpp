@@ -8,10 +8,10 @@
 #include "kws_cnn.h"
 
 #include "mbed_stats.h"
-extern mbed_stats_heap_t *pStaticHeapStats;
+extern mbed_stats_heap_t *benchmark_pStaticHeapStats;
 void mbed_stats_heap_reset_max_size()
 {
-    pStaticHeapStats->max_size = pStaticHeapStats->current_size;
+    benchmark_pStaticHeapStats->max_size = benchmark_pStaticHeapStats->current_size;
 }
 // #include "mbed_mem_trace.h"
 
