@@ -45,7 +45,7 @@ int code_part = -1;
 
 unsigned long int Heap_stats[nb_memory_stats] = {0};
 unsigned long int Stack_stats[nb_memory_stats] = {0};
-unsigned long int dynamic_allocated_memory[nb_memory_stats] = {0};
+// unsigned long int dynamic_allocated_memory[nb_memory_stats] = {0};
 
 
 // If needed, send char indicating normal execution on mbed side. 
@@ -114,7 +114,7 @@ int send_audio()
     return close_socket_on_normal_exec(false);
 }
 
-
+/*
 void mem_trace_callback(uint8_t op, void *res, void *caller, ...) {
     va_list va;
     size_t temp_s1, temp_s2;
@@ -155,7 +155,7 @@ void mem_trace_callback(uint8_t op, void *res, void *caller, ...) {
     }
     va_end(va);
 }
-
+*/
 
 int inference()
 {
@@ -168,7 +168,10 @@ int inference()
     // KWS_DS_CNN kws(audio_data);
     KWS_CNN kws(audio_data);
     code_part = 1;
-
+    /*void *allocation = malloc(10000);
+    {int blob[1000];}
+    free(allocation);*/
+    
     mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; // mbed_stats_heap_reset_max_size();
     mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
 
@@ -218,13 +221,13 @@ int send_memory_stats()
 {
     socket.send(Heap_stats, sizeof(Heap_stats));
     socket.send(Stack_stats, sizeof(Stack_stats));
-    socket.send(dynamic_allocated_memory, sizeof(dynamic_allocated_memory));
+    // socket.send(dynamic_allocated_memory, sizeof(dynamic_allocated_memory));
 
     for (int i = 0; i < nb_memory_stats; ++i)
     {
         Heap_stats[i] = 0;
         Stack_stats[i] = 0;
-        dynamic_allocated_memory[i] = 0;
+        // dynamic_allocated_memory[i] = 0;
     }
     
     return close_socket_on_normal_exec(false);
