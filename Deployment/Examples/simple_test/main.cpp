@@ -8,6 +8,11 @@
 #include "kws_cnn.h"
 
 #include "mbed_stats.h"
+extern mbed_stats_heap_t *pStaticHeapStats;
+void mbed_stats_heap_reset_max_size()
+{
+    pStaticHeapStats->max_size = pStaticHeapStats->current_size;
+}
 // #include "mbed_mem_trace.h"
 
 
@@ -40,7 +45,7 @@ int code_part = -1;
 
 unsigned long int Heap_stats[nb_memory_stats] = {0};
 unsigned long int Stack_stats[nb_memory_stats] = {0};
-unsigned long int dynamic_allocated_memory[nb_memory_stats] = {0};
+// unsigned long int dynamic_allocated_memory[nb_memory_stats] = {0};
 
 
 // If needed, send char indicating normal execution on mbed side. 
@@ -157,7 +162,7 @@ int inference()
     mbed_stats_heap_t Hstats;
     mbed_stats_stack_t Sstats;
     code_part = 0;
-    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; mbed_stats_heap_reset_max_size();
+    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; // mbed_stats_heap_reset_max_size();
     mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
 
     // KWS_DS_CNN kws(audio_data);
@@ -167,7 +172,7 @@ int inference()
     {int blob[1000];}
     free(allocation);*/
     
-    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; mbed_stats_heap_reset_max_size();
+    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; // mbed_stats_heap_reset_max_size();
     mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
 
     int start;
@@ -176,7 +181,7 @@ int inference()
     code_part = 2;
     kws.extract_features();
     T_ms_features_extraction = T.read_ms() - start; T.stop();
-    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; mbed_stats_heap_reset_max_size();
+    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; // mbed_stats_heap_reset_max_size();
     mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
 
     // classify using network
@@ -184,7 +189,7 @@ int inference()
     code_part = 3;
     kws.classify();
     T_ms_inference = T.read_ms() - start; T.stop();
-    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; mbed_stats_heap_reset_max_size();
+    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; // mbed_stats_heap_reset_max_size();
     mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
     
     code_part = -1;
@@ -216,13 +221,13 @@ int send_memory_stats()
 {
     socket.send(Heap_stats, sizeof(Heap_stats));
     socket.send(Stack_stats, sizeof(Stack_stats));
-    socket.send(dynamic_allocated_memory, sizeof(dynamic_allocated_memory));
+    // socket.send(dynamic_allocated_memory, sizeof(dynamic_allocated_memory));
 
     for (int i = 0; i < nb_memory_stats; ++i)
     {
         Heap_stats[i] = 0;
         Stack_stats[i] = 0;
-        dynamic_allocated_memory[i] = 0;
+        // dynamic_allocated_memory[i] = 0;
     }
     
     return close_socket_on_normal_exec(false);
