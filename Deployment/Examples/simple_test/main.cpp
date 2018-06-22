@@ -1,11 +1,15 @@
 #include "mbed.h"
+
 #include "TCPSocket.h"
 #include "EthernetInterface.h"
 #include "SocketAddress.h"
 
-#include "kws_ds_cnn.h"
+//#include "kws_ds_cnn.h"
+#include "kws_cnn.h"
 
 #include "mbed_stats.h"
+// #include "mbed_mem_trace.h"
+
 
 // Network interface to pc
 EthernetInterface eth;
@@ -18,7 +22,7 @@ TCPServer tcpserver;
 // Buffer for audio and communication to pc
 const int audio_data_length = 16000;
 int16_t audio_data[audio_data_length] = {0};
-const int COM_BUFFER_SIZE = 32100;
+const int COM_BUFFER_SIZE = 4096;
 uint8_t COM_BUFFER[COM_BUFFER_SIZE];
 
 int idx_max_class = -1;  // classes: {"Silence", "Unknown","yes","no","up","down","left","right","on","off","stop","go"}
@@ -31,8 +35,12 @@ int T_ms_inference = -1;
 
 // Measure memory statistics
 const int nb_memory_stats = 4;
+// Index refering to part of code execution
+int code_part = -1;
+
 unsigned long int Heap_stats[nb_memory_stats] = {0};
 unsigned long int Stack_stats[nb_memory_stats] = {0};
+unsigned long int dynamic_allocated_memory[nb_memory_stats] = {0};
 
 
 // If needed, send char indicating normal execution on mbed side. 
@@ -51,7 +59,8 @@ int close_socket_on_normal_exec(bool send_flag)
         socket.close();
     }        
     else
-        return client_response; // Something wrong happened.
+        NVIC_SystemReset();
+        // return client_response; // Something wrong happened.
     return 0;
 }
 
@@ -100,39 +109,85 @@ int send_audio()
     return close_socket_on_normal_exec(false);
 }
 
+/*
+void mem_trace_callback(uint8_t op, void *res, void *caller, ...) {
+    va_list va;
+    size_t temp_s1, temp_s2;
+    void *temp_ptr;
+
+    printf("In callback !\r\n");
+    if (code_part < 0 || code_part > nb_memory_stats)
+        return;
+    
+    va_start(va, caller);
+    switch(op) {
+        case MBED_MEM_TRACE_MALLOC:
+            temp_s1 = va_arg(va, size_t);
+            printf(MBED_MEM_DEFAULT_TRACER_PREFIX "m:%p;%p-%u\r\n", res, caller, temp_s1);
+            dynamic_allocated_memory[code_part] += temp_s1;
+            break;
+
+        case MBED_MEM_TRACE_REALLOC:
+            temp_ptr = va_arg(va, void*);
+            temp_s1 = va_arg(va, size_t);
+            printf(MBED_MEM_DEFAULT_TRACER_PREFIX "r:%p;%p-%p;%u\r\n", res, caller, temp_ptr, temp_s1);
+            break;
+
+        case MBED_MEM_TRACE_CALLOC:
+            temp_s1 = va_arg(va, size_t);
+            temp_s2 = va_arg(va, size_t);
+            printf(MBED_MEM_DEFAULT_TRACER_PREFIX "c:%p;%p-%u;%u\r\n", res, caller, temp_s1, temp_s2);
+            dynamic_allocated_memory[code_part] += temp_s1 * temp_s2;
+            break;
+
+        case MBED_MEM_TRACE_FREE:
+            temp_ptr = va_arg(va, void*);
+            printf(MBED_MEM_DEFAULT_TRACER_PREFIX "f:%p;%p-%p\r\n", res, caller, temp_ptr);
+            break;
+
+        default:
+            printf("?\r\n");
+    }
+    va_end(va);
+}
+*/
+
 int inference()
 {
     mbed_stats_heap_t Hstats;
     mbed_stats_stack_t Sstats;
-    mbed_stats_heap_get(&Hstats); Heap_stats[0] = Hstats.max_size;
-    mbed_stats_stack_get(&Sstats); Stack_stats[0] = Sstats.max_size;
+    code_part = 0;
+    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; mbed_stats_heap_reset_max_size();
+    mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
 
-    KWS_DS_CNN kws(audio_data);
-
-    void *allocation = malloc(10000);
+    // KWS_DS_CNN kws(audio_data);
+    KWS_CNN kws(audio_data);
+    code_part = 1;
+    /*void *allocation = malloc(10000);
+    {int blob[1000];}
+    free(allocation);*/
     
-    {    int blob[1000];}
-
-    mbed_stats_heap_get(&Hstats); Heap_stats[1] = Hstats.max_size;
-    mbed_stats_stack_get(&Sstats); Stack_stats[1] = Sstats.max_size;
-
-    free(allocation);
+    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; mbed_stats_heap_reset_max_size();
+    mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
 
     int start;
     // extract mfcc features
     T.reset(); T.start(); start = T.read_ms();
+    code_part = 2;
     kws.extract_features();
     T_ms_features_extraction = T.read_ms() - start; T.stop();
-    mbed_stats_heap_get(&Hstats); Heap_stats[2] = Hstats.max_size;
-    mbed_stats_stack_get(&Sstats); Stack_stats[2] = Sstats.max_size;
+    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; mbed_stats_heap_reset_max_size();
+    mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
 
     // classify using network
     T.reset(); T.start(); start = T.read_ms();
+    code_part = 3;
     kws.classify();
     T_ms_inference = T.read_ms() - start; T.stop();
-    mbed_stats_heap_get(&Hstats); Heap_stats[3] = Hstats.max_size;
-    mbed_stats_stack_get(&Sstats); Stack_stats[3] = Sstats.max_size;
+    mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; mbed_stats_heap_reset_max_size();
+    mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
     
+    code_part = -1;
     idx_max_class = kws.get_top_class(kws.output);
     prediction_confidence = ((int)kws.output[idx_max_class]*100/128);
 
@@ -161,11 +216,13 @@ int send_memory_stats()
 {
     socket.send(Heap_stats, sizeof(Heap_stats));
     socket.send(Stack_stats, sizeof(Stack_stats));
+    socket.send(dynamic_allocated_memory, sizeof(dynamic_allocated_memory));
 
     for (int i = 0; i < nb_memory_stats; ++i)
     {
         Heap_stats[i] = 0;
         Stack_stats[i] = 0;
+        dynamic_allocated_memory[i] = 0;
     }
     
     return close_socket_on_normal_exec(false);
@@ -225,7 +282,9 @@ void get_client_connection()
 
 int main()
 {
-    printf("Example network-socket TCP Server\r\n");
+    // mbed_mem_trace_set_callback(mem_trace_callback);
+
+    printf("Network-socket TCP Server benchmarking !\r\n");
     eth.disconnect();
     int i=eth.set_network(IP,MASK,GATEWAY);
     printf("set IP status: %i \r\n",i);
