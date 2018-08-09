@@ -40,10 +40,10 @@ char output_class[12][8] = {"Silence", "Unknown","yes","no","up","down",
 //  but increase detection latency and reduce true positive detections.
 
 // (recording_win*frame_shift) is the actual recording window size
-int recording_win = 3; 
+int recording_win = 3; // default value for arm: 3
 // Averaging window for smoothing out the output predictions
-int averaging_window_len = 3;  
-int detection_threshold = 90;  //in percent
+int averaging_window_len = 5;// 3;  // default value for arm: 3
+int detection_threshold = 90;  //in percent  // default value for arm: 90
 
 void run_kws();
 

@@ -63,6 +63,22 @@ void maxpool_q7_HWC_nonsquare (
         q7_t * Im_out,
         const uint16_t out_lshift);
 
+void GRU_layer_q7_q7(
+        q7_t * input, uint16_t input_size, uint16_t hidden_size,
+        const q7_t * weights_input_reset, const q7_t * bias_input_reset, const q7_t * weights_hidden_reset, const q7_t * bias_hidden_reset,
+        const uint16_t bias_lshift_input_reset, const uint16_t out_rshift_input_reset,
+        const uint16_t bias_lshift_hidden_reset, const uint16_t out_rshift_hidden_reset,
+        const uint16_t reset_int_bit_width,
+        const q7_t * weights_input_update, const q7_t * bias_input_update, const q7_t * weights_hidden_update, const q7_t * bias_hidden_update,
+        const uint16_t bias_lshift_input_update, const uint16_t out_rshift_input_update,
+        const uint16_t bias_lshift_hidden_update, const uint16_t out_rshift_hidden_update,
+        const uint16_t update_int_bit_width,
+        const q7_t * weights_input_new, const q7_t * bias_input_new, const q7_t * weights_hidden_new, const q7_t * bias_hidden_new,
+        const uint16_t bias_lshift_input_new, const uint16_t out_rshift_input_new,
+        const uint16_t bias_lshift_hidden_new, const uint16_t out_rshift_hidden_new,
+        const uint16_t new_int_bit_width,
+        q7_t * hidden,
+        q7_t * scratch_buffer);
 
 #ifdef __cplusplus
 }

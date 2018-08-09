@@ -19,8 +19,8 @@
 #include "kws_f746ng.h"
 
 KWS_F746NG::KWS_F746NG(int recording_win, int sliding_window_len)
-:KWS_DS_CNN(recording_win, sliding_window_len)
-//:KWS_DNN(recording_win, sliding_window_len) 
+//:KWS_DS_CNN(recording_win, sliding_window_len)
+:KWS_DNN(recording_win, sliding_window_len) 
 // Change the parent class to KWS_DNN to switch to DNN model
 {
   audio_buffer = new int16_t[audio_buffer_size];
@@ -47,9 +47,12 @@ void KWS_F746NG::start_kws()
   memset(audio_buffer_out, 0, audio_block_size*8);
 
   // May need to adjust volume to get better accuracy/user-experience 
-  audio.IN_SetVolume(85);
+  audio.IN_SetVolume(80);
+  // audio.IN_Init(INPUT_DEVICE_DIGITAL_MICROPHONE_2, 80, 16000);
+  // audio.IN_OUT_Init(INPUT_DEVICE_INPUT_LINE_1, OUTPUT_DEVICE_BOTH, 16000, 16, 0);
+  // audio.IN_SetVolume(75);
 
-  // Start Recording 
+  // Start Recording
   audio.IN_Record((uint16_t*)audio_buffer_in, audio_block_size * 4);
 
   // Start Playback for listening to what is being classified 

@@ -46,7 +46,7 @@ public:
 
 protected:
   KWS();
-  void init_kws();
+  virtual void init_kws();
   MFCC *mfcc;
   NN *nn;
   int mfcc_buffer_size;

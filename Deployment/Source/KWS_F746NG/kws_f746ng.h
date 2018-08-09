@@ -20,12 +20,12 @@
 #define __KWS_F746NG_H__
 
 #include "AUDIO_DISCO_F746NG.h"
-#include "kws_ds_cnn.h"
-//#include "kws_dnn.h"
+// #include "kws_ds_cnn.h"
+#include "kws_dnn.h"
 
 // Change the parent class to KWS_DNN to switch to DNN model
-//class KWS_F746NG : public KWS_DNN {
-class KWS_F746NG : public KWS_DS_CNN {
+class KWS_F746NG : public KWS_DNN {
+// class KWS_F746NG : public KWS_DS_CNN {
 public:
   KWS_F746NG(int recording_win, int sliding_window_len);
   ~KWS_F746NG();

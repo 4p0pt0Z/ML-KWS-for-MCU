@@ -4,8 +4,9 @@
 #include "EthernetInterface.h"
 #include "SocketAddress.h"
 
-//#include "kws_ds_cnn.h"
-#include "kws_cnn.h"
+// #include "kws_ds_cnn.h"
+// #include "kws_cnn.h"
+#include "kws_log_mel.h"
 
 #include "mbed_stats.h"
 extern mbed_stats_heap_t *benchmark_pStaticHeapStats;
@@ -13,7 +14,6 @@ void mbed_stats_heap_reset_max_size()
 {
     benchmark_pStaticHeapStats->max_size = benchmark_pStaticHeapStats->current_size;
 }
-// #include "mbed_mem_trace.h"
 
 
 // Network interface to pc
@@ -64,7 +64,7 @@ int close_socket_on_normal_exec(bool send_flag)
         socket.close();
     }        
     else
-        NVIC_SystemReset();
+        NVIC_SystemReset();  // Reset the board
         // return client_response; // Something wrong happened.
     return 0;
 }
@@ -114,49 +114,6 @@ int send_audio()
     return close_socket_on_normal_exec(false);
 }
 
-/*
-void mem_trace_callback(uint8_t op, void *res, void *caller, ...) {
-    va_list va;
-    size_t temp_s1, temp_s2;
-    void *temp_ptr;
-
-    printf("In callback !\r\n");
-    if (code_part < 0 || code_part > nb_memory_stats)
-        return;
-    
-    va_start(va, caller);
-    switch(op) {
-        case MBED_MEM_TRACE_MALLOC:
-            temp_s1 = va_arg(va, size_t);
-            printf(MBED_MEM_DEFAULT_TRACER_PREFIX "m:%p;%p-%u\r\n", res, caller, temp_s1);
-            dynamic_allocated_memory[code_part] += temp_s1;
-            break;
-
-        case MBED_MEM_TRACE_REALLOC:
-            temp_ptr = va_arg(va, void*);
-            temp_s1 = va_arg(va, size_t);
-            printf(MBED_MEM_DEFAULT_TRACER_PREFIX "r:%p;%p-%p;%u\r\n", res, caller, temp_ptr, temp_s1);
-            break;
-
-        case MBED_MEM_TRACE_CALLOC:
-            temp_s1 = va_arg(va, size_t);
-            temp_s2 = va_arg(va, size_t);
-            printf(MBED_MEM_DEFAULT_TRACER_PREFIX "c:%p;%p-%u;%u\r\n", res, caller, temp_s1, temp_s2);
-            dynamic_allocated_memory[code_part] += temp_s1 * temp_s2;
-            break;
-
-        case MBED_MEM_TRACE_FREE:
-            temp_ptr = va_arg(va, void*);
-            printf(MBED_MEM_DEFAULT_TRACER_PREFIX "f:%p;%p-%p\r\n", res, caller, temp_ptr);
-            break;
-
-        default:
-            printf("?\r\n");
-    }
-    va_end(va);
-}
-*/
-
 int inference()
 {
     mbed_stats_heap_t Hstats;
@@ -166,11 +123,9 @@ int inference()
     mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;
 
     // KWS_DS_CNN kws(audio_data);
-    KWS_CNN kws(audio_data);
+    // KWS_CNN kws(audio_data);
+    KWS_LOG_MEL kws(audio_data);
     code_part = 1;
-    /*void *allocation = malloc(10000);
-    {int blob[1000];}
-    free(allocation);*/
     
     mbed_stats_heap_get(&Hstats); Heap_stats[code_part] = Hstats.max_size; // mbed_stats_heap_reset_max_size();
     mbed_stats_stack_get(&Sstats); Stack_stats[code_part] = Sstats.max_size;

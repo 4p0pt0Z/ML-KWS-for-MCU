@@ -1,4 +1,3 @@
 {
-    "name": "kws_simple_test",
-    "macros": ["MBED_MEM_TRACING_ENABLED"]
+    "name": "kws_simple_test"
 }

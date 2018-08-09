@@ -45,7 +45,7 @@ MFCC::MFCC(int num_mfcc_features, int frame_len, int mfcc_dec_bits)
 
   //create mel filterbank
   fbank_filter_first = new int32_t[NUM_FBANK_BINS];
-  fbank_filter_last = new int32_t[NUM_FBANK_BINS];;
+  fbank_filter_last = new int32_t[NUM_FBANK_BINS];
   mel_fbank = create_mel_fbank();
   
   //create DCT matrix

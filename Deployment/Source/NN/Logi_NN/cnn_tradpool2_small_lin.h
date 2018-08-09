@@ -10,7 +10,7 @@ https://github.com/castorini/honk
 #define __CNN_TRADPOOL2_SMALL_LIN_H__
 
 #include "nn.h"
-#include "cnn-tradpool2_small_lin_weights.h"
+#include "cnn_tradpool2_small_lin_q7_t.h"
 #include "local_NN.h"
 #include "arm_math.h"
 
